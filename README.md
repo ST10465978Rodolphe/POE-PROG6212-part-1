@@ -34,7 +34,7 @@ GitHub Actions validates that the /docs folder exists and contains the required 
 
 Screenshot of a successful green build:
 
-[Insert your CI/CD green checkmark screenshot here]
+![CI/CD Success](docs/ci-success.png)
 
 Video Presentation
 
