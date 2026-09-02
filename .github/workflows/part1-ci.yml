@@ -1,0 +1,49 @@
+name: Part 1 - Validate Repository Structure
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check /docs folder exists
+        run: |
+          if [ ! -d "docs" ]; then
+            echo "ERROR: /docs folder is missing"
+            exit 1
+          fi
+          echo "docs folder found"
+
+      - name: Check ERD file exists
+        run: |
+          if ! ls docs/*ERD* 1> /dev/null 2>&1; then
+            echo "ERROR: ERD file missing in /docs"
+            exit 1
+          fi
+          echo "ERD file found"
+
+      - name: Check API endpoint plan exists
+        run: |
+          if ! ls docs/*Endpoint*Plan* 1> /dev/null 2>&1; then
+            echo "ERROR: API endpoint plan missing in /docs"
+            exit 1
+          fi
+          echo "API endpoint plan found"
+
+      - name: Check SQL script exists
+        run: |
+          if ! ls docs/*.sql 1> /dev/null 2>&1; then
+            echo "ERROR: SQL script missing in /docs"
+            exit 1
+          fi
+          echo "SQL script found"
+
+      - name: All checks passed
+        run: echo "Repository structure is valid for Part 1 submission."
