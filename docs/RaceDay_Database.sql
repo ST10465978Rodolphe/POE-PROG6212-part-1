@@ -11,8 +11,7 @@ GO
 USE RaceDayDB;
 GO
 
-
-
+-- Stores all Organiser and Participant accounts
 CREATE TABLE [User]
 (
     UserID INT IDENTITY(1,1) PRIMARY KEY,
@@ -28,6 +27,7 @@ CREATE TABLE [User]
 );
 GO
 
+-- Stores events created by Organisers
 CREATE TABLE Event
 (
     EventID INT IDENTITY(1,1) PRIMARY KEY,
@@ -44,6 +44,7 @@ CREATE TABLE Event
 );
 GO
 
+-- Stores race categories within an event (e.g. 5km, 10km, 21km)
 CREATE TABLE Category
 (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
@@ -68,6 +69,7 @@ CREATE TABLE Category
 );
 GO
 
+-- Links a Participant to a Category they've entered
 CREATE TABLE Enrolment
 (
     EnrolmentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -92,6 +94,7 @@ CREATE TABLE Enrolment
 );
 GO
 
+-- Stores race results once captured by an Organiser
 CREATE TABLE Result
 (
     ResultID INT IDENTITY(1,1) PRIMARY KEY,
@@ -109,6 +112,7 @@ CREATE TABLE Result
 );
 GO
 
+-- Stores route details for an event (start/finish points, distance)
 CREATE TABLE Route
 (
     RouteID INT IDENTITY(1,1) PRIMARY KEY,
@@ -127,8 +131,6 @@ CREATE TABLE Route
         CHECK (Distance > 0)
 );
 GO
-
-
 
 -- Organisers
 
@@ -239,7 +241,6 @@ VALUES
      'Road cycling route around Cape Town',
      'Cape Town Stadium', 'Camps Bay', 40.00);
 GO
-
 
 SELECT * FROM [User];
 SELECT * FROM Event;
