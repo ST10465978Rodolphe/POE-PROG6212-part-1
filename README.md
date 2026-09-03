@@ -13,6 +13,12 @@ The system supports two distinct user roles:
 
 Organiser — can create, edit, and delete events, manage event categories, capture participant results, and view all event enrolments.
 Participant — can create an account, browse events, enter an event by selecting a category, view their own enrolments, and track their personal results.
+
+## Design Decisions
+
+- Distance is stored on Category rather than Event, since a single event (e.g. a running day) can offer multiple distances (5km, 10km, 21km) as separate categories.
+- Enrolment links directly to Category (not Event) to avoid data redundancy, since the event can always be derived via Category → Event.
+
 Technologies Used
 SQL Server Management Studio (SSMS) with (localdb)\MSSQLLocalDB
 Draw.io for ERD design
