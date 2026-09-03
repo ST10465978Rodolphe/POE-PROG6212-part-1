@@ -53,3 +53,7 @@ Video Presentation
 An unlisted YouTube video walking through the planning documents, the ERD decisions, the endpoint plan choices, and a live run of the SQL script in SSMS:
 
 [Insert your YouTube link here]
+
+
+
+(This project is developed as part of the PROG6212 Portfolio of Evidence).
