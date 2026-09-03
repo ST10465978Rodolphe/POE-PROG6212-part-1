@@ -13,21 +13,27 @@ The system supports two distinct user roles:
 
 Organiser — can create, edit, and delete events, manage event categories, capture participant results, and view all event enrolments.
 Participant — can create an account, browse events, enter an event by selecting a category, view their own enrolments, and track their personal results.
+Technologies Used
+SQL Server Management Studio (SSMS) with (localdb)\MSSQLLocalDB
+Draw.io for ERD design
+GitHub Actions for CI/CD
+Markdown / PDF for documentation
 Repository Structure
 /docs
-  ├── ERD.png                    # Entity Relationship Diagram
-  ├── api-endpoint-plan.md       # Full API endpoint plan
-  └── raceday-database.sql       # SQL script (schema + seed data)
+  ├── RaceDay_ERD.drawio.pdf          # Entity Relationship Diagram
+  ├── RaceDay API Endpoint Plan.pdf   # Full API endpoint plan
+  ├── RaceDay_Database.sql            # SQL script (schema + seed data)
+  └── ci-success.PNG                  # CI/CD success screenshot
 /.github/workflows
-  └── ci.yml                     # GitHub Actions workflow (validates /docs structure)
+  └── part1-ci.yml                    # GitHub Actions workflow (validates /docs structure)
 README.md
 Setup Instructions
 Clone this repository:
 bash
    git clone <YOUR_REPO_URL>
-Open docs/raceday-database.sql in SQL Server Management Studio (SSMS).
+Open docs/RaceDay_Database.sql in SQL Server Management Studio (SSMS).
 Run the entire script (F5) against a local SQL Server / LocalDB instance. The script drops and recreates RaceDayDB from scratch, so it runs cleanly on any instance.
-Review the ERD in docs/ERD.png and the endpoint plan in docs/api-endpoint-plan.md.
+Review the ERD in docs/RaceDay_ERD.drawio.pdf and the endpoint plan in docs/RaceDay API Endpoint Plan.pdf.
 CI/CD
 
 GitHub Actions validates that the /docs folder exists and contains the required files on every push.
