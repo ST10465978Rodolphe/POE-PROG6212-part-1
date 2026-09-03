@@ -14,6 +14,8 @@ The system supports two distinct user roles:
 Organiser — can create, edit, and delete events, manage event categories, capture participant results, and view all event enrolments.
 Participant — can create an account, browse events, enter an event by selecting a category, view their own enrolments, and track their personal results.
 
+- **Admin oversight**: Organisers can only manage events they created; role checks are enforced at the API level in Part 2.
+
 ## Design Decisions
 
 - Distance is stored on Category rather than Event, since a single event (e.g. a running day) can offer multiple distances (5km, 10km, 21km) as separate categories.
