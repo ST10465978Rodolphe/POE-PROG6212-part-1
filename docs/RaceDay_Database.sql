@@ -240,6 +240,7 @@ VALUES
      'Cape Town Stadium', 'Camps Bay', 40.00);
 GO
 
+-- Test queries
 
 SELECT * FROM [User];
 SELECT * FROM Event;
