@@ -35,6 +35,12 @@ Repository Structure
 /.github/workflows
   └── part1-ci.yml                    # GitHub Actions workflow (validates /docs structure)
 README.md
+
+## Prerequisites
+
+- SQL Server Management Studio (SSMS) or Azure Data Studio
+- A local SQL Server instance or LocalDB
+
 Setup Instructions
 Clone this repository:
 bash
