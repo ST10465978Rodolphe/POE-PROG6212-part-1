@@ -18,7 +18,7 @@ Participant — can create an account, browse events, enter an event by selectin
 
 ## Design Decisions
 
-- Distance is stored on Category rather than Event, since a single event (e.g. a running day) can offer multiple distances (5km, 10km, 21km) as separate categories.
+- Distance is stored on both Event (the main distance of the event) and Category (the distance of each category), since one event can offer several distances.
 - Enrolment links directly to Category (not Event) to avoid data redundancy, since the event can always be derived via Category → Event.
 
 Technologies Used
