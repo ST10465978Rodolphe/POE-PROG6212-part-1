@@ -12,7 +12,7 @@ using RaceDay.Api.Data;
 namespace RaceDay.Api.Migrations
 {
     [DbContext(typeof(RaceDayDbContext))]
-    [Migration("20261012200826_InitialRaceDayDatabase")]
+    [Migration("20261014111114_InitialRaceDayDatabase")]
     partial class InitialRaceDayDatabase
     {
         /// <inheritdoc />
@@ -51,7 +51,8 @@ namespace RaceDay.Api.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("Password");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)

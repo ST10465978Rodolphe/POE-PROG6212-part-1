@@ -48,7 +48,8 @@ namespace RaceDay.Api.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("Password");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
