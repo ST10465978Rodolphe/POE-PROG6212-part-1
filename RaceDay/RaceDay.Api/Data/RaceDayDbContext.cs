@@ -32,7 +32,7 @@ public class RaceDayDbContext : DbContext
             entity.Property(u => u.FirstName).IsRequired().HasMaxLength(50);
             entity.Property(u => u.LastName).IsRequired().HasMaxLength(50);
             entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
-            entity.Property(u => u.PasswordHash).IsRequired().HasMaxLength(255);
+            entity.Property(u => u.PasswordHash).IsRequired().HasMaxLength(255).HasColumnName("Password");
             entity.Property(u => u.Role).IsRequired().HasMaxLength(20);
             entity.Property(u => u.Phone).HasMaxLength(20);
 
