@@ -66,4 +66,48 @@ public class AuthController : ControllerBase
 
         return StatusCode(StatusCodes.Status201Created, response);
     }
+
+    [HttpPost("login")]
+    [SwaggerOperation(
+        Summary = "Log in",
+        Description = "Checks the credentials and starts a server-side session that stores the UserId and Role.")]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        string email = request.Email.Trim();
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        // Same message for "unknown email" and "wrong password" so nothing is leaked
+        if (user == null || !PasswordHasher.Verify(request.Password, user.PasswordHash))
+        {
+            return Unauthorized(new { message = "Invalid email or password." });
+        }
+
+        // The session remembers who the user is and what role they have
+        HttpContext.Session.SetInt32(SessionKeys.UserId, user.UserId);
+        HttpContext.Session.SetString(SessionKeys.Role, user.Role);
+
+        return Ok(new AuthResponse
+        {
+            UserId = user.UserId,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Role = user.Role,
+            Message = "Login successful."
+        });
+    }
+
+    [HttpPost("logout")]
+    [SwaggerOperation(
+        Summary = "Log out",
+        Description = "Clears the session so protected endpoints are no longer accessible.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        return Ok(new { message = "Logged out." });
+    }
 }
