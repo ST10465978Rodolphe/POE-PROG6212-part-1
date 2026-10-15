@@ -3,7 +3,6 @@
 namespace RaceDay.Contracts;
 
 // ---------- Authentication ----------
-
 public class RegisterRequest
 {
     [Required, StringLength(50)]
@@ -46,7 +45,6 @@ public class AuthResponse
 }
 
 // ---------- Profile ----------
-
 public class ProfileDto
 {
     public int UserId { get; set; }
@@ -70,7 +68,6 @@ public class UpdateProfileRequest
 }
 
 // ---------- Events ----------
-
 public class CreateEventRequest
 {
     [Required, StringLength(100)]
@@ -110,7 +107,6 @@ public class EventDto
 }
 
 // ---------- Categories ----------
-
 public class CreateCategoryRequest
 {
     [Required, StringLength(100)]
@@ -137,6 +133,21 @@ public class CategoryDto
 }
 
 // ---------- Enrolments ----------
+public class CreateEnrolmentRequest
+{
+    [Range(1, int.MaxValue)]
+    public int EventId { get; set; }
+
+    [Range(1, int.MaxValue)]
+    public int CategoryId { get; set; }
+}
+
+public class UpdateEnrolmentStatusRequest
+{
+    // "Confirmed" or "Cancelled"
+    [Required]
+    public string Status { get; set; } = string.Empty;
+}
 
 public class EnrolmentDto
 {
@@ -152,7 +163,6 @@ public class EnrolmentDto
 }
 
 // ---------- Results ----------
-
 public class CreateResultRequest
 {
     public TimeSpan FinishTime { get; set; }
@@ -174,7 +184,6 @@ public class ResultDto
 }
 
 // ---------- Routes ----------
-
 public class RouteRequest
 {
     [Required, StringLength(100)]
