@@ -82,11 +82,32 @@ public class ResultsController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, ToDto(saved));
     }
 
+    [HttpGet("mine")]
+    [RequireRole("Participant")]
+    [SwaggerOperation(
+        Summary = "List my results",
+        Description = "Participant only. Returns only the results of the logged-in Participant, newest first.")]
+    [ProducesResponseType(typeof(List<ResultDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> GetMine()
+    {
+        int userId = HttpContext.GetUserId();
+
+        var results = await WithDetails()
+            .Where(r => r.Enrolment!.ParticipantId == userId)
+            .OrderByDescending(r => r.ResultDate)
+            .ThenByDescending(r => r.ResultId)
+            .ToListAsync();
+
+        return Ok(results.Select(ToDto));
+    }
+
     [HttpGet("event/{eventId:int}")]
     [RequireRole("Organiser")]
     [SwaggerOperation(
         Summary = "List the results of an event",
-        Description = "Organiser only, and only for events they own. Returns all captured results for the event, ordered by finishing position.")]
+        Description = "Organiser only, and only for events they own. Returns all captured results for the event, ordered by category and finishing position.")]
     [ProducesResponseType(typeof(List<ResultDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
