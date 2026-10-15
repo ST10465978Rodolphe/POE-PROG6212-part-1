@@ -165,6 +165,10 @@ public class EnrolmentDto
 // ---------- Results ----------
 public class CreateResultRequest
 {
+    [Range(1, int.MaxValue)]
+    public int EnrolmentId { get; set; }
+
+    // Format hh:mm:ss, for example "00:52:35"
     public TimeSpan FinishTime { get; set; }
 
     [Range(1, 1000000)]
