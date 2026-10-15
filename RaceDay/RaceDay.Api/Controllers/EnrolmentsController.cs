@@ -14,6 +14,9 @@ namespace RaceDay.Api.Controllers;
 [RequireRole] // must be logged in; the role is set per action
 public class EnrolmentsController : ControllerBase
 {
+    // Must match the CK_Enrolment_Status check constraint in RaceDayDbContext
+    private static readonly string[] ValidStatuses = { "Confirmed", "Cancelled" };
+
     private readonly RaceDayDbContext _db;
 
     public EnrolmentsController(RaceDayDbContext db)
@@ -115,6 +118,75 @@ public class EnrolmentsController : ControllerBase
             .ToListAsync();
 
         return Ok(enrolments.Select(ToDto));
+    }
+
+    [HttpGet("event/{eventId:int}")]
+    [RequireRole("Organiser")]
+    [SwaggerOperation(
+        Summary = "List the enrolments of an event",
+        Description = "Organiser only, and only for events they own. Returns every enrolment for the event with the Participant and category.")]
+    [ProducesResponseType(typeof(List<EnrolmentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetForEvent(int eventId)
+    {
+        var ev = await _db.Events.FindAsync(eventId);
+        if (ev == null)
+        {
+            return NotFound(new { message = "Event not found." });
+        }
+
+        if (ev.OrganiserId != HttpContext.GetUserId())
+        {
+            return StatusCode(StatusCodes.Status403Forbidden,
+                new { message = "You can only view enrolments for your own events." });
+        }
+
+        var enrolments = await WithDetails()
+            .Where(e => e.Category!.EventId == eventId)
+            .OrderBy(e => e.Participant!.LastName)
+            .ThenBy(e => e.Participant!.FirstName)
+            .ToListAsync();
+
+        return Ok(enrolments.Select(ToDto));
+    }
+
+    [HttpPut("{id:int}/status")]
+    [RequireRole("Organiser")]
+    [SwaggerOperation(
+        Summary = "Change the status of an enrolment",
+        Description = "Organiser only, and only for enrolments in events they own. Status must be 'Confirmed' or 'Cancelled'.")]
+    [ProducesResponseType(typeof(EnrolmentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateStatus(int id, UpdateEnrolmentStatusRequest request)
+    {
+        var enrolment = await WithDetails().FirstOrDefaultAsync(e => e.EnrolmentId == id);
+        if (enrolment == null)
+        {
+            return NotFound(new { message = "Enrolment not found." });
+        }
+
+        if (enrolment.Category!.Event!.OrganiserId != HttpContext.GetUserId())
+        {
+            return StatusCode(StatusCodes.Status403Forbidden,
+                new { message = "You can only manage enrolments for your own events." });
+        }
+
+        string? status = ValidStatuses.FirstOrDefault(s =>
+            s.Equals(request.Status.Trim(), StringComparison.OrdinalIgnoreCase));
+        if (status == null)
+        {
+            return BadRequest(new { message = "Status must be 'Confirmed' or 'Cancelled'." });
+        }
+
+        enrolment.Status = status;
+        await _db.SaveChangesAsync();
+
+        return Ok(ToDto(enrolment));
     }
 
     // Loads the related Participant, Category and Event so the DTO can be filled in
