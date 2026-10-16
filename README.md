@@ -181,4 +181,4 @@ The Part 1 workflow (`part1-ci.yml`) keeps validating the `/docs` folder.
 Unlisted YouTube video demonstrating the running API, the code structure, authentication,
 Swagger and the unit tests:
 
-[Insert your Part 2 YouTube link here]
+[[Insert your Part 2 YouTube link here]](https://youtu.be/A3KobKJcdcM)
