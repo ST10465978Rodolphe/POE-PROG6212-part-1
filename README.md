@@ -174,7 +174,7 @@ The Part 1 workflow (`part1-ci.yml`) keeps validating the `/docs` folder.
 
 ### GitHub Actions Screenshot
 
-![CI/CD green build for Part 2](ci-success-part2.png)
+![CI/CD green build for Part 2](docs/ci-success-part2.PNG)
 
 ### Video Presentation
 
