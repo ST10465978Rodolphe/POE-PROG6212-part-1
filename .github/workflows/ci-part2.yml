@@ -15,24 +15,37 @@ jobs:
 
       - name: Check repository structure
         run: |
-          for d in docs RaceDay.Api RaceDay.Contracts RaceDay.Api.Tests; do
+          for d in docs RaceDay/RaceDay.Api RaceDay/RaceDay.Contracts RaceDay/RaceDay.Api.Tests; do
             if [ ! -d "$d" ]; then
               echo "ERROR: $d folder is missing"
               exit 1
             fi
             echo "$d found"
           done
+          if [ ! -f "RaceDay/RaceDay.slnx" ]; then
+            echo "ERROR: RaceDay/RaceDay.slnx is missing"
+            exit 1
+          fi
+          echo "Repository structure is valid."
 
+      # Several SDKs are installed so the build works whichever .NET version the
+      # projects target. The newest SDK is used (it can read the .slnx solution file).
       - name: Install .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
 
       - name: Restore packages
-        run: dotnet restore
+        working-directory: RaceDay
+        run: dotnet restore RaceDay.slnx
 
       - name: Build solution
-        run: dotnet build --no-restore --configuration Release
+        working-directory: RaceDay
+        run: dotnet build RaceDay.slnx --no-restore --configuration Release
 
       - name: Run unit tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        working-directory: RaceDay
+        run: dotnet test RaceDay.slnx --no-build --configuration Release --verbosity normal
