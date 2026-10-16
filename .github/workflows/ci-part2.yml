@@ -1,0 +1,38 @@
+name: Part 2 - Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check repository structure
+        run: |
+          for d in docs RaceDay.Api RaceDay.Contracts RaceDay.Api.Tests; do
+            if [ ! -d "$d" ]; then
+              echo "ERROR: $d folder is missing"
+              exit 1
+            fi
+            echo "$d found"
+          done
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore packages
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run unit tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
